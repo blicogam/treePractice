@@ -1,4 +1,6 @@
 
+// Need to add part to delete node with two children
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -50,6 +52,84 @@ int doesItExistsNode(treeNode *root, int value)
 		return doesItExistsNode(root->right, value);
 	else
 		return doesItExistsNode(root->left, value);
+}
+
+void deleteBinaryTree(treeNode **root, int value)
+{
+	if(*root == NULL)
+		return;
+	if(doesItExistsNode == 0)
+	{
+		printf("Not found, can't delete: %d\n", value);
+		return;
+	}
+
+	treeNode *temp = *root, *prev = *root;
+
+	while(temp != NULL)
+	{
+		if(temp->value > value)
+		{
+			prev = temp;
+			temp = temp->left;
+		}
+		else if(temp->value < value)
+		{
+			prev = temp;
+			temp = temp->right;
+		}
+		else
+			break;
+	}
+
+	if(temp == NULL)
+	{
+		printf("ERROR\n");
+		return;
+	}
+
+	if(temp->left == NULL && temp->right == NULL)
+	{
+		if(prev->value > temp->value)
+			prev->left = NULL;
+		else
+			prev->right = NULL;
+		free(temp);
+		return;
+	}
+
+	else if(temp->left == NULL)
+	{
+		if(prev->value > temp->value)
+		{
+			prev->left = temp->right;
+			free(temp);
+		}
+		else
+		{
+			prev->right = temp->right;
+			free(temp);
+		}
+	}
+
+	else if(temp->right == NULL)
+	{
+		if(prev->value > temp->value)
+		{
+			prev->left = temp->left;
+			free(temp);
+		}
+		else
+		{
+			prev->right = temp->left;
+			free(temp);
+		}
+	}
+
+	else
+	{
+
+	}
 }
 
 void inorderPrint(treeNode *root)
