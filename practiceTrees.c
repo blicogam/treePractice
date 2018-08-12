@@ -40,6 +40,18 @@ void insertBinaryTree(treeNode **root, int value)
 
 }
 
+int doesItExistsNode(treeNode *root, int value)
+{
+	if(root == NULL)
+		return 0;
+	if(root->value == value)
+		return 1;
+	if(root->value < value)
+		return doesItExistsNode(root->right, value);
+	else
+		return doesItExistsNode(root->left, value);
+}
+
 void inorderPrint(treeNode *root)
 {
 	if(root == NULL)
@@ -53,6 +65,9 @@ int main(int argc, int argv)
 	treeNode *head = NULL;
 	insertBinaryTree(&head, 36);
 	insertBinaryTree(&head, 27);
+	insertBinaryTree(&head, 45);
+	insertBinaryTree(&head, 15);
 	inorderPrint(head);
+	printf("%d\n", doesItExistsNode(head, 15));
 	return 0;
 }
