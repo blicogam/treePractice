@@ -1,7 +1,7 @@
 public class BinarySearchTree implements Tree {
 
 	Node head;
-	int height = 0;
+	int numNodes = 0;
 
 	BinarySearchTree () {
 		head = null;
@@ -10,6 +10,7 @@ public class BinarySearchTree implements Tree {
 	Node insert(Node current, int value) {
 		if(current == null) {
 			Node newNode = new Node(value);
+			numNodes++;
 			return newNode;
 		}
 		if(current.value == value) {
@@ -30,18 +31,18 @@ public class BinarySearchTree implements Tree {
 		head = insert(head, val);
 	}
 
-	public void delete(int val) {
+	public void delete(int value) {
 		if(head == null) {
 			return;
 		}
-		Node temp = head, prev;
+		Node temp = head, prev = null;
 		while(temp != null) {
 			if(temp.value > value) {
 				prev = temp;
 				temp = temp.left;
 			}
 			else if(temp.value < value) {
-				prev = templ
+				prev = temp;
 				temp = temp.right;
 			}
 			else {
@@ -54,42 +55,76 @@ public class BinarySearchTree implements Tree {
 			return;
 		}
 
-		if(!temp.left && !temp.right) {
+		if(temp.left == null && temp.right == null) {
 			if(prev.value > value) {
 				prev.left = null;
 			}
 			else {
 				prev.right = null;
 			}
+			numNodes--;
 		}
-		else if(!temp.left) {
+		else if(temp.left == null) {
 			if(prev.value > value) {
 				prev.left = temp.right;
 			}
 			else {
 				prev.right = temp.right;
 			}
+			numNodes--;
 		}
-		else if(!temp.right) {
+		else if(temp.right == null) {
 			if(prev.value > value) {
 				prev.left = temp.left;
 			}
 			else {
 				prev.right = temp.left;
 			}
+			numNodes--;
 		}
 		// Has two children
 		else {
 			// Replace with the min element in the right most subtreee of node to be removed
+			Node minRight = temp.right;
+			Node prevMin = temp;
+			while(minRight.left != null) {
+				prevMin = minRight;
+				minRight = minRight.left;
+			}
+			// Replacing "deleted"
+			temp.value = minRight.value;
+
+			// Remove original replaced
+
+			// Not sure if both needed
+			if(prevMin.right == minRight) {
+				prevMin.right = (minRight.right == null)? null: minRight.right;
+			}
+			else if(prevMin.left == minRight) {
+				prevMin.left = (minRight.right == null)? null: minRight.left;
+			}
+			numNodes--;
 		}
 	}
 
-	public boolean contains(int val) {
+	public boolean contains(int value) {
+		Node temp = head;
+		while(temp != null) {
+			if(temp.value > value) {
+				temp = temp.left;
+			}
+			else if(temp.value < value) {
+				temp = temp.right;
+			}
+			else {
+				return true;
+			}
+		}
 		return false;
 	}
 
-	public int getHeight() {
-		return this.height;
+	int getNumNodes() {
+		return this.numNodes;
 	}
 
 	void inorder(Node current) {
